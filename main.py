@@ -53,8 +53,8 @@ class DocumentClassificationDataset(Dataset):
         with json_path.open("r") as f:
             ocr_result = json.load(f)
             
-        width_scale = 1000/width
-        height_scale = 1000/height
+        width_scale = (1000/width)%1000
+        height_scale = (1000/height)%1000
         
         words = []
         boxes = []
@@ -62,6 +62,7 @@ class DocumentClassificationDataset(Dataset):
             boxes.append(scale_bounding_box(row["bounding_box"], width_scale, height_scale))
             words.append(row["word"])
             
+    
         encoding = processor(
             image,
             words,
@@ -73,7 +74,7 @@ class DocumentClassificationDataset(Dataset):
         )
         
         label = DOCUMENT_CLASSES.index(image_path.parent.name)
-        
+        print(encoding["bbox"])
         return dict(
             input_ids=encoding["input_ids"].flatten(),
             attention_mask=encoding["attention_mask"].flatten(),
