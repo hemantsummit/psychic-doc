@@ -22,6 +22,16 @@ feature_extractor = LayoutLMv3FeatureExtractor(apply_ocr=False)
 tokenizer = LayoutLMv3TokenizerFast.from_pretrained("microsoft/layoutlmv3-base")
 processor = LayoutLMv3Processor(feature_extractor, tokenizer)
 
+def scale_bounding_box(box: List[int], width_scale: float, height_scale: float) -> List[int]:
+    return [
+        int(box[0] * width_scale),
+        int(box[1] * height_scale),
+        int(box[2] * width_scale),
+        int(box[3] * height_scale)
+    ]
+
+
+
 DOCUMENT_CLASSES = [p.name for p in list(Path("images").glob("*"))]
 
 class DocumentClassificationDataset(Dataset):
