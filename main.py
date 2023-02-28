@@ -74,7 +74,7 @@ class DocumentClassificationDataset(Dataset):
         )
         
         label = DOCUMENT_CLASSES.index(image_path.parent.name)
-        print(encoding["bbox"])
+        # print(encoding["bbox"])
         return dict(
             input_ids=encoding["input_ids"].flatten(),
             attention_mask=encoding["attention_mask"].flatten(),
@@ -177,4 +177,16 @@ trainer = pl.Trainer(
 )
 
 trainer.fit(model_module, train_data_loader, test_data_loader)
+
+model_checkpoint.best_model_path
+
+trained_model = ModelModule.load_from_checkpoint(
+    model_checkpoint.best_model_path,
+    n_classes=len(DOCUMENT_CLASSES),
+    local_files_only=True
+)
+
+trained_model.model.save_pretrained(Path("best-model"))
+
+trained_model.model.push_to_hub("layoutlmv3-document-classification")
 
