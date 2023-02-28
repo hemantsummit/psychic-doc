@@ -92,14 +92,14 @@ train_data_loader = DataLoader(
     train_dataset,
     batch_size=4,
     shuffle=True,
-    num_workers=8
+    num_workers=1
 )
 
 test_data_loader = DataLoader(
     test_dataset,
     batch_size=4,
     shuffle=False,
-    num_workers=8
+    num_workers=1
 )
 
 class ModelModule(pl.LightningModule):
